@@ -1,0 +1,39 @@
+package com.hms.dto;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.validation.constraints.*;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class StudentDto {
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Setter(onMethod_ = @JsonIgnore)
+    private Integer id;
+    @NotEmpty(message = "Must Not be Empty")
+    @Size(min = 2,message = "First Name Must be Greater Than 2 Letters")
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    @NotEmpty(message = "Must Not be Empty")
+    @Size(min = 12,max = 12,message = "Aadhaar Number Must be of 12 digits")
+    private String aadhaar;
+    @NotEmpty(message = "Must Not be Empty")
+    @Pattern(regexp = "^\\d{10}$",message = "Must Contain 10 Digits")
+    private String mobile;
+    @NotEmpty(message = "Must Not be Empty")
+    @Email(message = "Not a Valid Email Format")
+    private String email;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Getter(onMethod_ = @JsonIgnore)
+    @NotBlank
+    @Size(min = 4,message = "Password must have more than 4 letters")
+    private String password;
+}
