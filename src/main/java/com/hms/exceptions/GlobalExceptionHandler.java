@@ -34,8 +34,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(MalformedJwtException.class)
-    public ResponseEntity<ApiResponse> MalformedJwtExceptionHandler(MalformedJwtException ex){
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse> MalformedJwtExceptionHandler(Exception ex){
         String msg = ex.getMessage();
         return new ResponseEntity<>(new ApiResponse(msg,false),HttpStatus.UNAUTHORIZED);
     }
