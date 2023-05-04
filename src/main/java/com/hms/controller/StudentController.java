@@ -38,12 +38,12 @@ public class StudentController {
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
 
+    //GET - to get all student
     @GetMapping("/")
     public ResponseEntity<List<StudentDto>> getAllStudent() {
         List<StudentDto> allStudent = this.studentService.getAllStudent();
         return new ResponseEntity<>(allStudent, HttpStatus.OK);
     }
-    //GET - to get all student
 
     //DELETE - to delete a student
     @DeleteMapping("/{studentId}")
