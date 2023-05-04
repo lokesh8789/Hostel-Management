@@ -36,4 +36,10 @@ public class StudentDto {
     @NotBlank
     @Size(min = 4,message = "Password must have more than 4 letters")
     private String password;
+    @NotEmpty(message = "Must not be empty")
+    private String street;
+    @NotEmpty(message = "Must not be empty")
+    private String city;
+    @NotEmpty(message = "Must not be empty")
+    private String state;
 }

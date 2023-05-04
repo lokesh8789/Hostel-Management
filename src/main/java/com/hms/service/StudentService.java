@@ -24,4 +24,7 @@ public interface StudentService {
     //find student by first name
     List<StudentDto> getByFirstName(String firstName);
 
+    //find student by state
+    List<StudentDto> getByStateName(String state);
+
 }

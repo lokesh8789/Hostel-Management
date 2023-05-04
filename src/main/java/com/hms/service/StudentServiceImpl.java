@@ -62,9 +62,17 @@ public class StudentServiceImpl implements StudentService{
         this.studentRepo.delete(student);
     }
 
+    //find student by first name
     @Override
     public List<StudentDto> getByFirstName(String firstName) {
         List<Student> students = this.studentRepo.findByFirstName(firstName);
+        return students.stream().map(student -> this.modelMapper.map(student, StudentDto.class)).collect(Collectors.toList());
+    }
+
+    //find student by state name
+    @Override
+    public List<StudentDto> getByStateName(String state) {
+        List<Student> students = this.studentRepo.findByState(state);
         return students.stream().map(student -> this.modelMapper.map(student, StudentDto.class)).collect(Collectors.toList());
     }
 }
