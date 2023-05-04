@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,13 @@ public class GlobalExceptionHandler {
             exceptionDetails.put(field,msg);
         });
         return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    //User already exists exception
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<ApiResponse> UserExistsExceptionHandler(SQLIntegrityConstraintViolationException ex){
+        String msg = "User already exists";
+        return new ResponseEntity<>(new ApiResponse(msg,false),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
