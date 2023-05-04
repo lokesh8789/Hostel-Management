@@ -1,6 +1,7 @@
 package com.hms.exceptions;
 
 import com.hms.utils.ApiResponse;
+import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +32,19 @@ public class GlobalExceptionHandler {
             exceptionDetails.put(field,msg);
         });
         return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MalformedJwtException.class)
+    public ResponseEntity<ApiResponse> MalformedJwtExceptionHandler(MalformedJwtException ex){
+        String msg = ex.getMessage();
+        return new ResponseEntity<>(new ApiResponse(msg,false),HttpStatus.UNAUTHORIZED);
+    }
+
+    //User already exists exception
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<ApiResponse> UserExistsExceptionHandler(SQLIntegrityConstraintViolationException ex){
+        String msg = "User already exists";
+        return new ResponseEntity<>(new ApiResponse(msg,false),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

@@ -10,4 +10,6 @@ public interface StudentRepo extends JpaRepository<Student,Integer> {
 
     List<Student> findByFirstName(String firstName);
 
+    Student findByEmail(String email);
+
 }

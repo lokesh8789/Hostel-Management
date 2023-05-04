@@ -3,6 +3,7 @@ package com.hms.controller;
 import com.hms.dto.StudentDto;
 import com.hms.service.StudentService;
 import com.hms.utils.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/hms/student")
 public class StudentController {
@@ -40,6 +42,7 @@ public class StudentController {
 
     @GetMapping("/")
     public ResponseEntity<List<StudentDto>> getAllStudent() {
+        log.info("get all student api triggered");
         List<StudentDto> allStudent = this.studentService.getAllStudent();
         return new ResponseEntity<>(allStudent, HttpStatus.OK);
     }
