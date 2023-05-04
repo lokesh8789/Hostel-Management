@@ -31,4 +31,7 @@ public class Student {
     private String email;
     @Column(name = "password",nullable = false)
     private String password;
+    private String street;
+    private String city;
+    private String state;
 }
