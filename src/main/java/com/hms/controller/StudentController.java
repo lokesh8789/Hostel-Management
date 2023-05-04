@@ -54,15 +54,15 @@ public class StudentController {
     }
 
     //GET - to get a student by first name
-    @GetMapping("/name")
-    public ResponseEntity<List<StudentDto>> getByFirstName(@RequestParam String firstName) {
+    @GetMapping
+    public ResponseEntity<List<StudentDto>> getByFirstName(@RequestParam("name") String firstName) {
         List<StudentDto> students = this.studentService.getByFirstName(firstName);
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
     //GET - to get student by state name
-    @GetMapping("/state")
-    public  ResponseEntity<List<StudentDto>> getByState(@RequestParam String stateName){
+    @GetMapping(params = "state")
+    public  ResponseEntity<List<StudentDto>> getByState(@RequestParam("state") String stateName){
         List<StudentDto> students = this.studentService.getByStateName(stateName);
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
