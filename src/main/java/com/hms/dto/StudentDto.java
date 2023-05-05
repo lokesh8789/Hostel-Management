@@ -31,15 +31,14 @@ public class StudentDto {
     @NotEmpty(message = "Must Not be Empty")
     @Email(message = "Not a Valid Email Format")
     private String email;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Getter(onMethod_ = @JsonIgnore)
-    @NotBlank
-    @Size(min = 4,message = "Password must have more than 4 letters")
-    private String password;
     @NotEmpty(message = "Must not be empty")
     private String street;
     @NotEmpty(message = "Must not be empty")
     private String city;
     @NotEmpty(message = "Must not be empty")
     private String state;
+    @NotEmpty(message = "Must not be empty")
+    private String gender;
+    @NotEmpty(message = "Must not be empty")
+    private String course;
 }
