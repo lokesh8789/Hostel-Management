@@ -35,7 +35,6 @@ public class StudentServiceImpl implements StudentService{
         student.setLastName(studentDto.getLastName());
         student.setMiddleName(studentDto.getMiddleName());
         student.setEmail(studentDto.getEmail());
-        student.setPassword(studentDto.getPassword());
         Student save = this.studentRepo.save(student);
         return this.modelMapper.map(save,StudentDto.class);
     }
