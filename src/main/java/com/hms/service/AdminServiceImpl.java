@@ -3,6 +3,8 @@ package com.hms.service;
 import com.hms.dto.AdminDto;
 import com.hms.entity.Admin;
 import com.hms.exceptions.ResourceNotFoundException;
+import com.hms.exceptions.UserDoesNotExistException;
+import com.hms.exceptions.UserExistException;
 import com.hms.repo.AdminRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ public class AdminServiceImpl implements AdminService{
     public AdminDto findByEmail(String email) {
         Admin user = adminRepo.findByEmail(email);
         if(user == null){
-            throw new UsernameNotFoundException("Admin doesn't exists");
+            throw new UserDoesNotExistException("Admin doesn't exists");
         }
         return modelMapper.map(user,AdminDto.class);
     }
@@ -32,6 +34,10 @@ public class AdminServiceImpl implements AdminService{
     // add admin
     @Override
     public AdminDto addAdmin(AdminDto adminDto) {
+        Admin user = adminRepo.findByEmail(adminDto.getEmail());
+        if(user!=null){
+            throw new UserExistException("Admin Already Exist");
+        }
         Admin admin = this.modelMapper.map(adminDto, Admin.class);
         Admin save = this.adminRepo.save(admin);
         return this.modelMapper.map(save,AdminDto.class);
@@ -62,5 +68,9 @@ public class AdminServiceImpl implements AdminService{
         this.adminRepo.delete(admin);
     }
 
-
+    @Override
+    public AdminDto getAdminById(int id) {
+        Admin admin = adminRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Admin", "Id", id));
+        return modelMapper.map(admin,AdminDto.class);
+    }
 }

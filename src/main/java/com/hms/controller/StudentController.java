@@ -66,5 +66,10 @@ public class StudentController {
         List<StudentDto> students = this.studentService.getByStateName(stateName);
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
+    @GetMapping(params = "roll")
+    public ResponseEntity<StudentDto> getByRoll(@RequestParam("roll") String roll){
+        StudentDto student = studentService.getByRoll(roll);
+        return new ResponseEntity<>(student,HttpStatus.OK);
+    }
 
 }

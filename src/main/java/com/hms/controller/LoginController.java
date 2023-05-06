@@ -54,7 +54,7 @@ public class LoginController {
         return new ResponseEntity<>(new JwtAuthResponse(user,token,new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(expiration)),HttpStatus.OK);
     }
 
-    @PutMapping
+    @PutMapping("/forgetPassword")
     public ResponseEntity<?> forgetPassword(@RequestParam String email){
         AdminDto admin = this.adminService.findByEmail(email);
         if(admin==null){

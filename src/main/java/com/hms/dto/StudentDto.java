@@ -41,4 +41,6 @@ public class StudentDto {
     private String gender;
     @NotEmpty(message = "Must not be empty")
     private String course;
+    @NotEmpty(message = "Must not be empty")
+    private String roll;
 }

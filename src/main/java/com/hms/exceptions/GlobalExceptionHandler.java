@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
     //User already exists exception
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public ResponseEntity<ApiResponse> userExistsExceptionHandler(SQLIntegrityConstraintViolationException ex){
-        String msg = "User already exists";
+        String msg = "Error While Executing SQL Query";
         return new ResponseEntity<>(new ApiResponse(msg,false),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -48,5 +48,10 @@ public class GlobalExceptionHandler {
         String msg = ex.getMessage();
         return new ResponseEntity<>(new ApiResponse(msg,false),HttpStatus.NOT_FOUND);
     }
-
+    @ExceptionHandler(UserExistException.class)
+    public ResponseEntity<ApiResponse> userExistsException(UserExistException ex){
+        log.info("Inside User exists exception");
+        String msg = ex.getMessage();
+        return new ResponseEntity<>(new ApiResponse(msg,false),HttpStatus.CONFLICT);
+    }
 }

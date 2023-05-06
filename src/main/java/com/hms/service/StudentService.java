@@ -26,5 +26,6 @@ public interface StudentService {
 
     //find student by state
     List<StudentDto> getByStateName(String state);
+    StudentDto getByRoll(String roll);
 
 }

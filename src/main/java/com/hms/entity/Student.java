@@ -34,4 +34,5 @@ public class Student {
     private String state;
     private String gender;
     private String course;
+    private String roll;
 }

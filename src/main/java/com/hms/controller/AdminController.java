@@ -53,4 +53,9 @@ public class AdminController {
         this.adminService.deleteAdmin(adminId);
         return new ResponseEntity<>(new ApiResponse("Admin deleted successfully",true),HttpStatus.OK);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<AdminDto> getAdminById(@PathVariable("id") int id){
+        AdminDto user = adminService.getAdminById(id);
+        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
 }
