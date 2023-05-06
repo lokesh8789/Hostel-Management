@@ -6,6 +6,7 @@ import com.hms.exceptions.ResourceNotFoundException;
 import com.hms.repo.AdminRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,9 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public AdminDto findByEmail(String email) {
         Admin user = adminRepo.findByEmail(email);
+        if(user == null){
+            throw new UsernameNotFoundException("Admin doesn't exists");
+        }
         return modelMapper.map(user,AdminDto.class);
     }
 

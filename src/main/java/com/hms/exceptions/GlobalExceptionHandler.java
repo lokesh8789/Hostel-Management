@@ -1,6 +1,7 @@
 package com.hms.exceptions;
 
 import com.hms.utils.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -35,9 +37,16 @@ public class GlobalExceptionHandler {
 
     //User already exists exception
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public ResponseEntity<ApiResponse> UserExistsExceptionHandler(SQLIntegrityConstraintViolationException ex){
+    public ResponseEntity<ApiResponse> userExistsExceptionHandler(SQLIntegrityConstraintViolationException ex){
         String msg = "User already exists";
         return new ResponseEntity<>(new ApiResponse(msg,false),HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(UserDoesNotExistException.class)
+    public ResponseEntity<ApiResponse> userDoesNotExistsException(UserDoesNotExistException ex){
+        log.info("Inside User does not exists exception");
+        String msg = ex.getMessage();
+        return new ResponseEntity<>(new ApiResponse(msg,false),HttpStatus.NOT_FOUND);
     }
 
 }
