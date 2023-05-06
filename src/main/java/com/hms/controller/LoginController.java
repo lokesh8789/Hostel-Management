@@ -16,14 +16,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/hms")
@@ -55,4 +53,14 @@ public class LoginController {
         Date expiration = jwtTokenHelper.getExpirationDateFromToken(token);
         return new ResponseEntity<>(new JwtAuthResponse(user,token,new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(expiration)),HttpStatus.OK);
     }
+
+    @PutMapping
+    public ResponseEntity<?> forgetPassword(@RequestParam String email){
+        AdminDto admin = this.adminService.findByEmail(email);
+        if(admin==null){
+            return new ResponseEntity<>(new HashMap<>().put("result",false),HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new HashMap<>().put("result",true),HttpStatus.OK);
+    }
+
 }
