@@ -8,7 +8,6 @@ import com.hms.exceptions.UserExistException;
 import com.hms.repo.AdminRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,5 +71,12 @@ public class AdminServiceImpl implements AdminService{
     public AdminDto getAdminById(int id) {
         Admin admin = adminRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Admin", "Id", id));
         return modelMapper.map(admin,AdminDto.class);
+    }
+
+    @Override
+    public void resetPassword(AdminDto adminDto, String password) {
+        adminDto.setPassword(password);
+        Admin admin = modelMapper.map(adminDto, Admin.class);
+        adminRepo.save(admin);
     }
 }

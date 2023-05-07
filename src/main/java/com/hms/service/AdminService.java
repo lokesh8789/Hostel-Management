@@ -21,4 +21,6 @@ public interface AdminService {
     //delete admin
     void deleteAdmin(int adminId);
     AdminDto getAdminById(int id);
+
+    void resetPassword(AdminDto adminDto, String decodedPassword);
 }

@@ -47,6 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and()
                 .csrf().disable().authorizeRequests()
                 .antMatchers("/hms/login").permitAll()
+                .antMatchers("/hms/forgetPassword").permitAll()
                 .antMatchers("/error").permitAll()
                 .anyRequest().permitAll()
                 .and()

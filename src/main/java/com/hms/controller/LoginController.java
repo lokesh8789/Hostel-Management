@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -55,12 +56,16 @@ public class LoginController {
     }
 
     @PutMapping("/forgetPassword")
-    public ResponseEntity<?> forgetPassword(@RequestParam String email){
-        AdminDto admin = this.adminService.findByEmail(email);
-        if(admin==null){
-            return new ResponseEntity<>(new HashMap<>().put("result",false),HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> forgetPassword(@RequestParam String email,@RequestParam String password,@RequestParam String confirmPassword){
+        if(!password.equals(confirmPassword)){
+            return new ResponseEntity<>(new ApiResponse("Password Do Not Match",false),HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(new HashMap<>().put("result",true),HttpStatus.OK);
+
+        AdminDto admin = this.adminService.findByEmail(email);
+        String decodedPassword= new String(Base64.getDecoder().decode(password));
+        log.info("decodePassword -> "+decodedPassword);
+        adminService.resetPassword(admin,decodedPassword);
+        return new ResponseEntity<>(new ApiResponse("Password Reset Successfully",true),HttpStatus.OK);
     }
 
 }
