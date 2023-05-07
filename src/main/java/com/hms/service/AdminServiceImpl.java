@@ -48,7 +48,7 @@ public class AdminServiceImpl implements AdminService{
     public AdminDto updateAdmin(AdminDto adminDto, int adminId) {
         Admin admin = this.adminRepo.findById(adminId).orElseThrow(() -> new ResourceNotFoundException("Admin", "Id", adminId));
         admin.setEmail(adminDto.getEmail());
-        admin.setPassword(adminDto.getPassword());
+//        admin.setPassword(adminDto.getPassword());
         admin.setFullName(adminDto.getFullName());
         Admin save = this.adminRepo.save(admin);
         return this.modelMapper.map(save,AdminDto.class);

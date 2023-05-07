@@ -6,6 +6,7 @@ import com.hms.exceptions.ResourceNotFoundException;
 import com.hms.exceptions.UserDoesNotExistException;
 import com.hms.exceptions.UserExistException;
 import com.hms.repo.StudentRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class StudentServiceImpl implements StudentService{
 
     @Autowired
@@ -42,7 +44,15 @@ public class StudentServiceImpl implements StudentService{
         student.setMiddleName(studentDto.getMiddleName());
         student.setEmail(studentDto.getEmail());
         student.setRoll(studentDto.getRoll());
+        student.setGender(studentDto.getGender());
+        student.setCourse(studentDto.getCourse());
+        student.setAadhaar(studentDto.getAadhaar());
+        student.setCity(studentDto.getCity());
+        student.setState(studentDto.getState());
+        student.setStreet(studentDto.getStreet());
+        student.setMobile(studentDto.getMobile());
         Student save = this.studentRepo.save(student);
+        log.info("Student updated");
         return this.modelMapper.map(save,StudentDto.class);
     }
 

@@ -3,6 +3,7 @@ package com.hms.controller;
 import com.hms.dto.StudentDto;
 import com.hms.service.StudentService;
 import com.hms.utils.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/hms/student")
+@Slf4j
 public class StudentController {
     @Autowired
     private StudentService studentService;
@@ -27,6 +29,7 @@ public class StudentController {
     //PUT - to update student
     @PutMapping("/update/{studentId}")
     public ResponseEntity<StudentDto> updateStudent(@Valid @RequestBody StudentDto studentDto, @PathVariable int studentId) {
+        log.info("Update Api Triggered");
         StudentDto studentDto1 = this.studentService.updateStudent(studentDto, studentId);
         return new ResponseEntity<>(studentDto1, HttpStatus.OK);
     }
