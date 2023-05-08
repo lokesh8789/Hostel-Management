@@ -29,6 +29,10 @@ public class Student {
     private String mobile;
     @Column(name = "email_id",unique = true,nullable = false)
     private String email;
-    @Column(name = "password",nullable = false)
-    private String password;
+    private String street;
+    private String city;
+    private String state;
+    private String gender;
+    private String course;
+    private String roll;
 }
