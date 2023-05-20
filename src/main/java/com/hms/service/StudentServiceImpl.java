@@ -32,37 +32,37 @@ public class StudentServiceImpl implements StudentService{
     public StudentDto createStudent(StudentDto studentDto) {
         log.info("inside student service");
         Student user = studentRepo.findByRoll(studentDto.getRoll());
-        if(user != null){
+        if(user != null && user.getIsActive()==1){
             throw new UserExistException("User Already Exist");
         }
         if(studentDto.getGender().equalsIgnoreCase("male")) {
             if (studentDto.getYear() == 1) {
-                List<Room> rooms = this.roomService.findByHostelName("Vivekananda");
-                for (int i = 0; i < rooms.size(); i++) {
-                    if (rooms.get(i).getIsEmpty() != 2) {
-                        studentDto.setRoomNo(rooms.get(i).getRoomNo());
-                        roomService.updateRoomBYId(rooms.get(i).getRoomNo(), rooms.get(i).getIsEmpty() == 1 ? 2 : 1,"Vivekananda");
+                List<Room> rooms = this.roomService.findByHostelName(Constants.VIVEKANANDA);
+                for (Room room : rooms) {
+                    if (room.getIsEmpty() != 2) {
+                        studentDto.setRoomNo(room.getRoomNo());
+                        roomService.updateRoomByRoomNo(room.getRoomNo(), room.getIsEmpty() == 1 ? 2 : 1, Constants.VIVEKANANDA);
                         studentDto.setIsActive(1);
                         break;
                     }
                 }
             } else if (studentDto.getYear() == 2 || studentDto.getYear() == 3) {
-                List<Room> rooms = this.roomService.findByHostelName("JCBose");
-                for (int i = 0; i < rooms.size(); i++) {
-                    if (rooms.get(i).getIsEmpty() != 2) {
-                        studentDto.setRoomNo(rooms.get(i).getRoomNo());
-                        roomService.updateRoomBYId(rooms.get(i).getRoomNo(), rooms.get(i).getIsEmpty() == 1 ? 2 : 1,"JCBose");
+                List<Room> rooms = this.roomService.findByHostelName(Constants.JCBOSE);
+                for (Room room : rooms) {
+                    if (room.getIsEmpty() != 2) {
+                        studentDto.setRoomNo(room.getRoomNo());
+                        roomService.updateRoomByRoomNo(room.getRoomNo(), room.getIsEmpty() == 1 ? 2 : 1, Constants.JCBOSE);
                         studentDto.setIsActive(1);
                         break;
                     }
                 }
             } else if (studentDto.getYear() == 4) {
-                List<Room> rooms = this.roomService.findByHostelName("APJ");
-                for (int i = 0; i < rooms.size(); i++) {
-                    if (rooms.get(i).getIsEmpty() != 2) {
-                        studentDto.setRoomNo(rooms.get(i).getRoomNo());
-                        log.info(rooms.get(i).getIsEmpty()+"--------"+rooms.get(i).getRoomNo());
-                        roomService.updateRoomBYId(rooms.get(i).getRoomNo(), rooms.get(i).getIsEmpty() == 1 ? 2 : 1,"APJ");
+                List<Room> rooms = this.roomService.findByHostelName(Constants.APJ);
+                for (Room room : rooms) {
+                    if (room.getIsEmpty() != 2) {
+                        studentDto.setRoomNo(room.getRoomNo());
+                        log.info(room.getIsEmpty() + "--------" + room.getRoomNo());
+                        roomService.updateRoomByRoomNo(room.getRoomNo(), room.getIsEmpty() == 1 ? 2 : 1, Constants.APJ);
                         studentDto.setIsActive(1);
                         break;
                     }
@@ -70,11 +70,11 @@ public class StudentServiceImpl implements StudentService{
             }
         }
         else{
-            List<Room> rooms = this.roomService.findByHostelName("Sarojini");
-            for (int i = 0; i < rooms.size(); i++) {
-                if (rooms.get(i).getIsEmpty() != 2) {
-                    studentDto.setRoomNo(rooms.get(i).getRoomNo());
-                    roomService.updateRoomBYId(rooms.get(i).getRoomNo(), rooms.get(i).getIsEmpty() == 1 ? 2 : 1,"Sarojini");
+            List<Room> rooms = this.roomService.findByHostelName(Constants.SAROJINI);
+            for (Room room : rooms) {
+                if (room.getIsEmpty() != 2) {
+                    studentDto.setRoomNo(room.getRoomNo());
+                    roomService.updateRoomByRoomNo(room.getRoomNo(), room.getIsEmpty() == 1 ? 2 : 1, Constants.SAROJINI);
                     studentDto.setIsActive(1);
                     break;
                 }
@@ -115,8 +115,7 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public List<StudentDto> getAllStudent() {
         List<Student> students = this.studentRepo.findAll();
-        List<StudentDto> studentDtos = students.stream().map(student -> this.modelMapper.map(student, StudentDto.class)).collect(Collectors.toList());
-        return studentDtos;
+        return students.stream().map(student -> this.modelMapper.map(student, StudentDto.class)).collect(Collectors.toList());
     }
 
     //to get a student with id
@@ -130,31 +129,36 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public void deleteStudent(int studentId) {
         Student student = this.studentRepo.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Student", "Id", studentId));
-//        student.setIsActive(0);
         String gender = student.getGender();
         int year = student.getYear();
         int roomNo = student.getRoomNo();
         if(gender.equalsIgnoreCase("male")) {
             if (year == 1) {
                 Room room = roomService.findByRoomAndHostel(roomNo, Constants.VIVEKANANDA);
-                room.setIsEmpty(room.getIsEmpty() - 1);
+                if(room.getIsEmpty() != 0) {
+                    room.setIsEmpty(room.getIsEmpty() - 1);
+                }
             } else if (year == 2 || year == 3) {
                 Room room = roomService.findByRoomAndHostel(roomNo, Constants.JCBOSE);
-                room.setIsEmpty(room.getIsEmpty() - 1);
+                if(room.getIsEmpty() != 0) {
+                    room.setIsEmpty(room.getIsEmpty() - 1);
+                }
             } else if (year == 4) {
                 Room room = roomService.findByRoomAndHostel(roomNo, Constants.APJ);
-                room.setIsEmpty(room.getIsEmpty() - 1);
+                if(room.getIsEmpty() != 0) {
+                    room.setIsEmpty(room.getIsEmpty() - 1);
+                }
             }
         }
         else{
             Room room = roomService.findByRoomAndHostel(roomNo, Constants.SAROJINI);
-            room.setIsEmpty(room.getIsEmpty() - 1);
+            if(room.getIsEmpty() != 0) {
+                room.setIsEmpty(room.getIsEmpty() - 1);
+            }
         }
 
         student.setIsActive(0);
         studentRepo.save(student);
-
-//        this.studentRepo.delete(student);
     }
 
     //find student by first name

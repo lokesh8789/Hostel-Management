@@ -8,7 +8,7 @@ public interface RoomService {
 
     List<Room> findByHostelName(String hostelName);
 
-    Room updateRoomBYId(int roomNo,int isEmpty,String hostelName);
+    Room updateRoomByRoomNo(int roomNo,int isEmpty,String hostelName);
 
     Room findByRoomAndHostel(int roomNo,String hostelName);
 

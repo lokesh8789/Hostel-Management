@@ -22,7 +22,7 @@ public class Admin {
     private Integer id;
     @Column(name = "email_id",nullable = false,unique = true)
     private String email;
-    @Column(name = "password",nullable = false,unique = true)
+    @Column(name = "password",nullable = false)
     private String password;
     @Column(name = "full_name",nullable = false)
     private String fullName;

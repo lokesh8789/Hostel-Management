@@ -2,12 +2,14 @@ package com.hms.service;
 
 import com.hms.entity.Room;
 import com.hms.repo.RoomRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class RoomServiceImpl implements RoomService{
 
     @Autowired
@@ -19,16 +21,14 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public Room updateRoomBYId(int roomNo, int isEmpty,String hostelName) {
+    public Room updateRoomByRoomNo(int roomNo, int isEmpty,String hostelName) {
         Room room = roomRepo.findByRoomNoAndHostelName(roomNo,hostelName);
         room.setIsEmpty(isEmpty);
-        Room save = roomRepo.save(room);
-        return save;
+        return roomRepo.save(room);
     }
 
     @Override
     public Room findByRoomAndHostel(int roomNo, String hostelName) {
-        Room room = this.roomRepo.findByRoomNoAndHostelName(roomNo, hostelName);
-        return room;
+        return this.roomRepo.findByRoomNoAndHostelName(roomNo, hostelName);
     }
 }
