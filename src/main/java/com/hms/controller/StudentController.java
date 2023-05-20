@@ -22,6 +22,7 @@ public class StudentController {
     //POST - to create a student
     @PostMapping("/register")
     public ResponseEntity<StudentDto> createStudent(@Valid @RequestBody StudentDto studentDto) {
+        log.info("aaya ki nai aaya");
         StudentDto student = this.studentService.createStudent(studentDto);
         return new ResponseEntity<>(student, HttpStatus.CREATED);
     }

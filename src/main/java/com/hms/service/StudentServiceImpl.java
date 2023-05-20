@@ -5,7 +5,9 @@ import com.hms.entity.Student;
 import com.hms.exceptions.ResourceNotFoundException;
 import com.hms.exceptions.UserDoesNotExistException;
 import com.hms.exceptions.UserExistException;
+import com.hms.entity.Room;
 import com.hms.repo.StudentRepo;
+import com.hms.utils.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +24,63 @@ public class StudentServiceImpl implements StudentService{
     private ModelMapper modelMapper;
     @Autowired
     private StudentRepo studentRepo;
+    @Autowired
+    private RoomService roomService;
 
     //to create student in DB
     @Override
     public StudentDto createStudent(StudentDto studentDto) {
+        log.info("inside student service");
         Student user = studentRepo.findByRoll(studentDto.getRoll());
         if(user != null){
             throw new UserExistException("User Already Exist");
         }
+        if(studentDto.getGender().equalsIgnoreCase("male")) {
+            if (studentDto.getYear() == 1) {
+                List<Room> rooms = this.roomService.findByHostelName("Vivekananda");
+                for (int i = 0; i < rooms.size(); i++) {
+                    if (rooms.get(i).getIsEmpty() != 2) {
+                        studentDto.setRoomNo(rooms.get(i).getRoomNo());
+                        roomService.updateRoomBYId(rooms.get(i).getRoomNo(), rooms.get(i).getIsEmpty() == 1 ? 2 : 1,"Vivekananda");
+                        studentDto.setIsActive(1);
+                        break;
+                    }
+                }
+            } else if (studentDto.getYear() == 2 || studentDto.getYear() == 3) {
+                List<Room> rooms = this.roomService.findByHostelName("JCBose");
+                for (int i = 0; i < rooms.size(); i++) {
+                    if (rooms.get(i).getIsEmpty() != 2) {
+                        studentDto.setRoomNo(rooms.get(i).getRoomNo());
+                        roomService.updateRoomBYId(rooms.get(i).getRoomNo(), rooms.get(i).getIsEmpty() == 1 ? 2 : 1,"JCBose");
+                        studentDto.setIsActive(1);
+                        break;
+                    }
+                }
+            } else if (studentDto.getYear() == 4) {
+                List<Room> rooms = this.roomService.findByHostelName("APJ");
+                for (int i = 0; i < rooms.size(); i++) {
+                    if (rooms.get(i).getIsEmpty() != 2) {
+                        studentDto.setRoomNo(rooms.get(i).getRoomNo());
+                        log.info(rooms.get(i).getIsEmpty()+"--------"+rooms.get(i).getRoomNo());
+                        roomService.updateRoomBYId(rooms.get(i).getRoomNo(), rooms.get(i).getIsEmpty() == 1 ? 2 : 1,"APJ");
+                        studentDto.setIsActive(1);
+                        break;
+                    }
+                }
+            }
+        }
+        else{
+            List<Room> rooms = this.roomService.findByHostelName("Sarojini");
+            for (int i = 0; i < rooms.size(); i++) {
+                if (rooms.get(i).getIsEmpty() != 2) {
+                    studentDto.setRoomNo(rooms.get(i).getRoomNo());
+                    roomService.updateRoomBYId(rooms.get(i).getRoomNo(), rooms.get(i).getIsEmpty() == 1 ? 2 : 1,"Sarojini");
+                    studentDto.setIsActive(1);
+                    break;
+                }
+            }
+        }
+
         Student student = this.modelMapper.map(studentDto, Student.class);
         Student save = this.studentRepo.save(student);
         return this.modelMapper.map(save,StudentDto.class);
@@ -51,6 +102,8 @@ public class StudentServiceImpl implements StudentService{
         student.setState(studentDto.getState());
         student.setStreet(studentDto.getStreet());
         student.setMobile(studentDto.getMobile());
+        student.setYear(studentDto.getYear());
+        student.setDepartment(studentDto.getDepartment());
         Student save = this.studentRepo.save(student);
         log.info("Student updated");
         return this.modelMapper.map(save,StudentDto.class);
@@ -75,7 +128,31 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public void deleteStudent(int studentId) {
         Student student = this.studentRepo.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Student", "Id", studentId));
-        this.studentRepo.delete(student);
+//        student.setIsActive(0);
+        String gender = student.getGender();
+        int year = student.getYear();
+        int roomNo = student.getRoomNo();
+        if(gender.equalsIgnoreCase("male")) {
+            if (year == 1) {
+                Room room = roomService.findByRoomAndHostel(roomNo, Constants.VIVEKANANDA);
+                room.setIsEmpty(room.getIsEmpty() - 1);
+            } else if (year == 2 || year == 3) {
+                Room room = roomService.findByRoomAndHostel(roomNo, Constants.JCBOSE);
+                room.setIsEmpty(room.getIsEmpty() - 1);
+            } else if (year == 4) {
+                Room room = roomService.findByRoomAndHostel(roomNo, Constants.APJ);
+                room.setIsEmpty(room.getIsEmpty() - 1);
+            }
+        }
+        else{
+            Room room = roomService.findByRoomAndHostel(roomNo, Constants.SAROJINI);
+            room.setIsEmpty(room.getIsEmpty() - 1);
+        }
+
+        student.setIsActive(0);
+        studentRepo.save(student);
+
+//        this.studentRepo.delete(student);
     }
 
     //find student by first name

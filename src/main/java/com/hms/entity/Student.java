@@ -35,4 +35,11 @@ public class Student {
     private String gender;
     private String course;
     private String roll;
+    @Column(nullable = false)
+    private int year;
+    @Column(nullable = false)
+    private String department;
+    @Column(name = "room_no")
+    private int roomNo;
+    private int isActive;
 }

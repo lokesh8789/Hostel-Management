@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.validation.constraints.*;
 
 @Getter
@@ -43,4 +44,11 @@ public class StudentDto {
     private String course;
     @NotEmpty(message = "Must not be empty")
     private String roll;
+    @Min(value = 1 ,message = "Year should be between 1-4")
+    @Max(value = 4 ,message = "Year should be between 1-4")
+    private int year;
+    @NotEmpty(message = "Must not be empty")
+    private String department;
+    private int roomNo;
+    private int isActive;
 }
