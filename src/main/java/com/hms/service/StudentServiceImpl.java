@@ -104,6 +104,8 @@ public class StudentServiceImpl implements StudentService{
         student.setMobile(studentDto.getMobile());
         student.setYear(studentDto.getYear());
         student.setDepartment(studentDto.getDepartment());
+//        student.setRoomNo(studentDto.getRoomNo());
+//        student.setIsActive(studentDto.getIsActive());
         Student save = this.studentRepo.save(student);
         log.info("Student updated");
         return this.modelMapper.map(save,StudentDto.class);
