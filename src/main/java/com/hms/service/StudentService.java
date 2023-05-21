@@ -1,6 +1,7 @@
 package com.hms.service;
 
 import com.hms.dto.StudentDto;
+import com.hms.entity.Student;
 
 import java.util.List;
 
@@ -27,5 +28,8 @@ public interface StudentService {
     //find student by state
     List<StudentDto> getByStateName(String state);
     StudentDto getByRoll(String roll);
+
+    StudentDto getStudentByAadhaar(String aadhaar);
+    StudentDto getStudentByMobile(String mobile);
 
 }

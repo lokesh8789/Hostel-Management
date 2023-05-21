@@ -34,5 +34,13 @@ public class Student {
     private String state;
     private String gender;
     private String course;
+    @Column(unique = true,nullable = false)
     private String roll;
+    @Column(nullable = false)
+    private int year;
+    @Column(nullable = false)
+    private String department;
+    @Column(name = "room_no")
+    private int roomNo;
+    private int isActive;
 }
