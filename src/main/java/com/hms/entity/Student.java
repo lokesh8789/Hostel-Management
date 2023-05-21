@@ -34,6 +34,7 @@ public class Student {
     private String state;
     private String gender;
     private String course;
+    @Column(unique = true,nullable = false)
     private String roll;
     @Column(nullable = false)
     private int year;

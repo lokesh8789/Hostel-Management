@@ -33,7 +33,19 @@ public class StudentServiceImpl implements StudentService{
         log.info("inside student service");
         Student user = studentRepo.findByRoll(studentDto.getRoll());
         if(user != null && user.getIsActive()==1){
-            throw new UserExistException("User Already Exist");
+            throw new UserExistException("User With Roll No- "+user.getRoll()+ " Already Exist");
+        }
+        user = studentRepo.findByEmail(studentDto.getEmail());
+        if(user != null && user.getIsActive()==1){
+            throw new UserExistException("User With Email No- "+user.getEmail()+"  Already Exist");
+        }
+        user = studentRepo.findByAadhaar(studentDto.getAadhaar());
+        if(user != null && user.getIsActive()==1){
+            throw new UserExistException("User With Aadhaar No- "+user.getAadhaar()+"  Already Exist");
+        }
+        user = studentRepo.findByMobile(studentDto.getMobile());
+        if(user != null && user.getIsActive()==1){
+            throw new UserExistException("User With Mobile No- "+user.getMobile()+"  Already Exist");
         }
         if(studentDto.getGender().equalsIgnoreCase("male")) {
             if (studentDto.getYear() == 1) {
@@ -179,8 +191,27 @@ public class StudentServiceImpl implements StudentService{
     public StudentDto getByRoll(String roll) {
         Student student = studentRepo.findByRoll(roll);
         if(student==null){
-            throw new UserDoesNotExistException("User Not Found");
+            throw new UserDoesNotExistException("Student With Roll No- "+roll+" Not Found");
         }
         return modelMapper.map(student,StudentDto.class);
     }
+
+    @Override
+    public StudentDto getStudentByAadhaar(String aadhaar) {
+        Student student = studentRepo.findByAadhaar(aadhaar);
+        if (student==null){
+            throw new UserDoesNotExistException("Student With Aadhaar No- "+aadhaar+" Not Found");
+        }
+        return modelMapper.map(student,StudentDto.class);
+    }
+
+    @Override
+    public StudentDto getStudentByMobile(String mobile) {
+        Student student = studentRepo.findByMobile(mobile);
+        if (student==null){
+            throw new UserDoesNotExistException("Student With Mobile No- "+mobile+" Not Found");
+        }
+        return modelMapper.map(student,StudentDto.class);
+    }
+
 }

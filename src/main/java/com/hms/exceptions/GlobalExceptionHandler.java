@@ -35,10 +35,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
     }
 
-    //User already exists exception
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public ResponseEntity<ApiResponse> userExistsExceptionHandler(SQLIntegrityConstraintViolationException ex){
-        String msg = "Error While Executing SQL Query";
+        String msg = "Something went wrong";
         return new ResponseEntity<>(new ApiResponse(msg,false),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
