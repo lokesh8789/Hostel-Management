@@ -24,5 +24,6 @@ public class AdminDto {
     @NotBlank
     @Size(min = 4,message = "Password must have more than 4 letters")
     private String password;
+    @NotEmpty(message = "Must Not be Empty")
     private String fullName;
 }

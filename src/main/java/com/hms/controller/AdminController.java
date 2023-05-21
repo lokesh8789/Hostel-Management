@@ -1,6 +1,7 @@
 package com.hms.controller;
 
 import com.hms.dto.AdminDto;
+import com.hms.security.JwtTokenHelper;
 import com.hms.service.AdminService;
 import com.hms.utils.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -18,6 +20,9 @@ import java.util.List;
 public class AdminController {
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    JwtTokenHelper jwtTokenHelper;
 
     //POST - add admin
     @PostMapping("/add")
@@ -49,7 +54,11 @@ public class AdminController {
 
     //DELETE - delete admin
     @DeleteMapping("delete/{adminId}")
-    public ResponseEntity<ApiResponse> deleteAdmin(@PathVariable int adminId){
+    public ResponseEntity<ApiResponse> deleteAdmin(@PathVariable int adminId, HttpServletRequest request){
+        Integer id = jwtTokenHelper.getUserIdFromToken(request);
+        if(id==adminId){
+            return new ResponseEntity<>(new ApiResponse("You Cannot Delete Yourself",true),HttpStatus.EXPECTATION_FAILED);
+        }
         this.adminService.deleteAdmin(adminId);
         return new ResponseEntity<>(new ApiResponse("Admin deleted successfully",true),HttpStatus.OK);
     }
