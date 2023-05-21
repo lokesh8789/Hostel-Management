@@ -31,11 +31,11 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public StudentDto createStudent(StudentDto studentDto) {
         log.info("inside student service");
-        Student user = studentRepo.findByRoll(studentDto.getRoll());
-        if(user != null && user.getIsActive()==1){
-            throw new UserExistException("User With Roll No- "+user.getRoll()+ " Already Exist");
+        Student user1 = studentRepo.findByRoll(studentDto.getRoll());
+        if(user1 != null && user1.getIsActive()==1){
+            throw new UserExistException("User With Roll No- "+user1.getRoll()+ " Already Exist");
         }
-        user = studentRepo.findByEmail(studentDto.getEmail());
+        Student user = studentRepo.findByEmail(studentDto.getEmail());
         if(user != null && user.getIsActive()==1){
             throw new UserExistException("User With Email No- "+user.getEmail()+"  Already Exist");
         }
@@ -92,10 +92,41 @@ public class StudentServiceImpl implements StudentService{
                 }
             }
         }
-
-        Student student = this.modelMapper.map(studentDto, Student.class);
-        Student save = this.studentRepo.save(student);
-        return this.modelMapper.map(save,StudentDto.class);
+        if(user1!=null && user1.getIsActive()==0) {
+            List<Student> students = studentRepo.findByEmailAndRollNot(studentDto.getEmail(), user1.getRoll());
+            if(students!=null && students.size()>0){
+                throw new UserExistException("The Email: "+studentDto.getEmail()+" is already registered For Roll: "+students.get(0).getRoll());
+            }
+            students = studentRepo.findByAadhaarAndRollNot(studentDto.getAadhaar(), user1.getAadhaar());
+            if(students!=null && students.size()>0){
+                throw new UserExistException("The Aadhaar: "+studentDto.getAadhaar()+" is already registered For Roll: "+students.get(0).getRoll());
+            }
+            students = studentRepo.findByMobileAndRollNot(studentDto.getMobile(),user1.getRoll());
+            if(students!=null && students.size()>0){
+                throw new UserExistException("The Mobile: "+studentDto.getMobile()+" is already registered For Roll: "+students.get(0).getRoll());
+            }
+            user1.setRoomNo(studentDto.getRoomNo());
+            user1.setCity(studentDto.getCity());
+            user1.setDepartment(studentDto.getDepartment());
+            user1.setCourse(studentDto.getCourse());
+            user1.setAadhaar(studentDto.getAadhaar());
+            user1.setEmail(studentDto.getEmail());
+            user1.setFirstName(studentDto.getFirstName());
+            user1.setMiddleName(studentDto.getMiddleName());
+            user1.setLastName(studentDto.getLastName());
+            user1.setState(studentDto.getState());
+            user1.setMobile(studentDto.getMobile());
+            user1.setIsActive(studentDto.getIsActive());
+            user1.setGender(studentDto.getGender());
+            user1.setStreet(studentDto.getStreet());
+            user1.setYear(studentDto.getYear());
+            Student student = studentRepo.save(user1);
+            return modelMapper.map(student,StudentDto.class);
+        } else {
+            Student student = this.modelMapper.map(studentDto, Student.class);
+            Student save = this.studentRepo.save(student);
+            return this.modelMapper.map(save, StudentDto.class);
+        }
     }
 
     //to update student
